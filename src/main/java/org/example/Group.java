@@ -3,7 +3,7 @@ package org.example;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Group {
+public class Group implements Cloneable{
     List<Cell> cells = new ArrayList<>(9);
     int groupIndex;
 

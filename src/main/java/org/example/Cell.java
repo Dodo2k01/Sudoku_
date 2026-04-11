@@ -23,6 +23,8 @@ public class Cell {
         this.yAxis = yAxis;
     }
 
+
+
     public boolean setValue(int value) {
         if (value > 9 || value < 1) {throw new IllegalArgumentException("Value must be between 1 and 9");}
         if (this.value != 0) {return false;}
@@ -65,6 +67,13 @@ public class Cell {
 
     public void setCol(Group col) {
         this.col = col;
+    }
+
+    public boolean equals(Cell cell){
+        if (this.value != cell.value) return false;
+        if (this.xAxis != cell.xAxis) return false;
+        if (this.yAxis != cell.yAxis) return false;
+        return true;
     }
 
     public List<Integer> getDomain() {

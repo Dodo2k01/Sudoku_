@@ -8,7 +8,6 @@ public class Sudoku {
     Group[] cubes = new Group[9];
     List<Cell> cells;
 
-    public record result(int[][] board, int nResults){}
 
     public Sudoku() {
         List<Cell> cells = new ArrayList<>(81);
@@ -37,29 +36,83 @@ public class Sudoku {
         }
     }
 
+    public Sudoku(Sudoku sudoku) {
+        this.cells = new ArrayList<>(sudoku.cells.size());
+        for (Cell c : sudoku.cells) {
+            Cell cellCloned = new Cell(c.getxAxis(), c.getyAxis());
+            cellCloned.setValue(c.getValue());
+            this.cells.add(cellCloned);
+        }
+        for (int i = 0; i < 9; i++) {
+            rows[i] = new Group(i);
+            cols[i] = new Group(i);
+            cubes[i] = new Group(i);
+        }
+        for (Cell c : this.cells) {
+            int x = c.getxAxis();
+            int y = c.getyAxis();
+            rows[x].addCell(c);
+            c.setRow(rows[x]);
+            cols[y].addCell(c);
+            c.setCol(cols[y]);
+            cubes[(x/3) * 3 + y/3].addCell(c);
+            c.setCube(cubes[(x/3) * 3 + y/3]);
+        }
+    }
+
     public boolean populateSudokuRandomly(List<Cell> remCells) {
         if (remCells.isEmpty()) {return true;}
         Cell minDomainCell = Collections.min(remCells, Comparator.comparingInt(c -> c.getDomain().size()));
         remCells.remove(minDomainCell);
         List<Integer> domain = minDomainCell.getDomain();
-        Collections.shuffle(domain);
+        Collections.shuffle(domain, new Random(42));
         for (Integer val : domain){
-            if (minDomainCell.setValue(val)){
-                if(populateSudokuRandomly(remCells)) {
-                    return true;
-                }
-                else{
-                    minDomainCell.removeValue();
-                }
+            minDomainCell.setValue(val);
+            if(populateSudokuRandomly(remCells)) {
+                return true;
+            }
+            else{
+                minDomainCell.removeValue();
             }
         }
         remCells.add(minDomainCell);
         return false;
     }
 
+    public int countSolutions(List<Cell> remCells, int limitSolutions) {
+        if (remCells.isEmpty()) {return 1;}
+        Cell c = Collections.min(remCells, Comparator.comparingInt(x -> x.getDomain().size()));
+        int count = 0;
+        for (Integer val : new ArrayList<>(c.getDomain())) {
+            c.setValue(val);
+            count += countSolutions(remCells, limitSolutions - count);
+            c.removeValue();
+            if (count >= limitSolutions) break;
+        }
+        remCells.add(c);
+        return count;
+    }
+
+    public boolean hasUnique(){
+        List<Cell> zeroCells = new ArrayList<>(this.cells);
+        zeroCells.removeIf(c -> c.getValue() != 0);
+        return countSolutions(zeroCells, 2) == 1;
+    }
+
+
     public List<Cell> getCells() {
         return cells;
     }
+
+    public boolean equals(Sudoku sudoku) {
+        for (int i = 0; i < sudoku.cells.size(); i++) {
+            if (!this.cells.equals(sudoku.cells.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static void main(String[] args) {
         Sudoku sudoku = new Sudoku();
@@ -72,6 +125,5 @@ public class Sudoku {
         }
 
         System.out.println(Arrays.deepToString(board));
-
     }
 }
