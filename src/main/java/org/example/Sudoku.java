@@ -60,6 +60,10 @@ public class Sudoku {
         }
     }
 
+    public boolean populateSudokuRandomly(){
+        return populateSudokuRandomly(new ArrayList<>(this.cells));
+    }
+
     public boolean populateSudokuRandomly(List<Cell> remCells) {
         if (remCells.isEmpty()) {return true;}
         Cell minDomainCell = Collections.min(remCells, Comparator.comparingInt(c -> c.getDomain().size()));
@@ -78,12 +82,12 @@ public class Sudoku {
         remCells.add(minDomainCell);
         return false;
     }
-
+    //TODO look at the setValue. sth is off
     public int countSolutions(List<Cell> remCells, int limitSolutions) {
         if (remCells.isEmpty()) {return 1;}
         Cell c = Collections.min(remCells, Comparator.comparingInt(x -> x.getDomain().size()));
         int count = 0;
-        for (Integer val : new ArrayList<>(c.getDomain())) {
+        for (Integer val : c.getDomain()) {
             c.setValue(val);
             count += countSolutions(remCells, limitSolutions - count);
             c.removeValue();
@@ -113,17 +117,18 @@ public class Sudoku {
         return true;
     }
 
+    public String toString() {
+        int[][] board = new int[9][9];
+        for (var cell : this.cells) {
+            board[cell.getxAxis()][cell.getyAxis()] = cell.getValue();
+        }
+        return Arrays.deepToString(board);
+    }
+
 
     public static void main(String[] args) {
         Sudoku sudoku = new Sudoku();
-        if (sudoku.populateSudokuRandomly(new ArrayList<>(sudoku.getCells()))){
-            System.out.println("Sudoku populated");
-        }
-        int[][] board = new int[9][9];
-        for (var cell : sudoku.cells) {
-            board[cell.getxAxis()][cell.getyAxis()] = cell.getValue();
-        }
-
-        System.out.println(Arrays.deepToString(board));
+        sudoku.populateSudokuRandomly();
+        System.out.println(sudoku);
     }
 }

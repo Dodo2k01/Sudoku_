@@ -76,14 +76,18 @@ public class Cell {
         return true;
     }
 
+    @Override
+    public String toString(){
+       return String.format("x-axis: %d, y-axis: %d, val: %d", xAxis, yAxis, value);
+    }
+
     public List<Integer> getDomain() {
         if (this.value != 0) return Collections.emptyList();
-        Set<Integer> rowDomain = row.getGroupDomain();
-        Set<Integer> colDomain = col.getGroupDomain();
-        Set<Integer> cubeDomain = cube.getGroupDomain();
-        Set<Integer> intersection = new HashSet<>(rowDomain);
-        intersection.retainAll(colDomain);
-        intersection.retainAll(cubeDomain);
+        Group[] groups = {row, col, cube};
+        Set<Integer> intersection = new HashSet<>(Utils.getFullDomain());
+        for (Group g : groups) {
+            if(g!=null) intersection.retainAll(g.getGroupDomain());
+        }
         return new ArrayList<>(intersection);
     }
 }
