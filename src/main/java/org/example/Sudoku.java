@@ -40,7 +40,10 @@ public class Sudoku {
         this.cells = new ArrayList<>(sudoku.cells.size());
         for (Cell c : sudoku.cells) {
             Cell cellCloned = new Cell(c.getxAxis(), c.getyAxis());
-            cellCloned.setValue(c.getValue());
+            int cVal = c.getValue();
+            if (cVal != 0) {
+                cellCloned.setValue(cVal);
+            }
             this.cells.add(cellCloned);
         }
         for (int i = 0; i < 9; i++) {
@@ -101,7 +104,6 @@ public class Sudoku {
         return false;
     }
 
-    //TODO look at the setValue. sth is off
     public int countSolutions(List<Cell> remCells, int maxSolutions) {
         if (remCells.isEmpty()) {return 1;}
         Cell best = Collections.min(remCells, Comparator.comparingInt(c -> c.getDomain().size()));

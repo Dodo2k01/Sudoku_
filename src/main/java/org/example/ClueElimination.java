@@ -53,7 +53,7 @@ public class ClueElimination {
                 int val = cell.getValue();
                 cell.removeValue();
                 boolean unique = working.hasUnique();
-                System.out.printf("%s is leading to unique = %b\n", cell, unique);
+//                System.out.printf("%s is leading to unique = %b\n", cell, unique);
                 if (!unique){
                     cell.setValue(val);
                 }
@@ -77,8 +77,8 @@ public class ClueElimination {
         Sudoku solved = new Sudoku();
         solved.populateSudokuRandomly();
         System.out.println(solved);
-        ClueElimination ce = new ClueElimination(solved, 30);
-        ce.runPipeline(20);
+        ClueElimination ce = new ClueElimination(solved, 20);
+        ce.runPipeline(60);
         System.out.println(ce.getAlmostMinimalSudoku());
     }
 }
