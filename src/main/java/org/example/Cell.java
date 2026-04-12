@@ -23,7 +23,12 @@ public class Cell {
         this.yAxis = yAxis;
     }
 
-
+    public boolean setValueNoDomainCheck(int value) {
+        if (value > 9 || value < 1) {throw new IllegalArgumentException("Value must be between 1 and 9");}
+        if (this.value != 0) {return false;}
+        this.value = value;
+        return true;
+    }
 
     public boolean setValue(int value) {
         if (value > 9 || value < 1) {throw new IllegalArgumentException("Value must be between 1 and 9");}

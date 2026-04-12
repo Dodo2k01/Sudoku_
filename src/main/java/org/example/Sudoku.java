@@ -82,19 +82,40 @@ public class Sudoku {
         remCells.add(minDomainCell);
         return false;
     }
-    //TODO look at the setValue. sth is off
-    public int countSolutions(List<Cell> remCells, int limitSolutions) {
-        if (remCells.isEmpty()) {return 1;}
-        Cell c = Collections.min(remCells, Comparator.comparingInt(x -> x.getDomain().size()));
-        int count = 0;
-        for (Integer val : c.getDomain()) {
-            c.setValue(val);
-            count += countSolutions(remCells, limitSolutions - count);
-            c.removeValue();
-            if (count >= limitSolutions) break;
+
+
+    public boolean solveSudoku(List<Cell> remCells){
+        if (remCells.isEmpty()) {return true;}
+        Cell best = Collections.min(remCells, Comparator.comparingInt(c -> c.getDomain().size()));
+        remCells.remove(best);
+        for (Integer val : best.getDomain()){
+            best.setValue(val);
+            if(solveSudoku(remCells)) {
+                return true;
+            }
+            else{
+                best.removeValue();
+            }
         }
-        remCells.add(c);
-        return count;
+        remCells.add(best);
+        return false;
+    }
+
+    //TODO look at the setValue. sth is off
+    public int countSolutions(List<Cell> remCells, int maxSolutions) {
+        if (remCells.isEmpty()) {return 1;}
+        Cell best = Collections.min(remCells, Comparator.comparingInt(c -> c.getDomain().size()));
+        remCells.remove(best);
+        int solutions = 0;
+        var domain = best.getDomain();
+        for (Integer val : domain){
+            best.setValueNoDomainCheck(val); // (no overhead)
+            solutions += countSolutions(remCells, maxSolutions - solutions);
+            best.removeValue();
+            if (solutions >= maxSolutions) break;
+        }
+        remCells.add(best);
+        return solutions;
     }
 
     public boolean hasUnique(){

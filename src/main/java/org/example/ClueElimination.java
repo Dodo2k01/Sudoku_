@@ -11,6 +11,14 @@ public class ClueElimination {
     Sudoku almostMinimalSudoku;
 
 
+    public Sudoku getAlmostMinimalSudoku() {
+        return almostMinimalSudoku;
+    }
+
+    public Sudoku getSolvedSudoku() {
+        return solvedSudoku;
+    }
+
     public ClueElimination(Sudoku solvedSudoku, int maxClues) {
         if (solvedSudoku.getCells().stream().anyMatch(c -> c.getValue()==0)){
             throw new IllegalArgumentException("The sudoku board passed is not solved!");
@@ -70,6 +78,7 @@ public class ClueElimination {
         solved.populateSudokuRandomly();
         System.out.println(solved);
         ClueElimination ce = new ClueElimination(solved, 30);
-        ce.runPipeline(5);
+        ce.runPipeline(20);
+        System.out.println(ce.getAlmostMinimalSudoku());
     }
 }
