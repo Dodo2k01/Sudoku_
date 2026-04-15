@@ -4,7 +4,7 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-    background: #f5f5f5;
+    background: white;
 }
 
 #board {
@@ -24,6 +24,7 @@ body {
     background: white;
     box-sizing: border-box;
     transition: background-color 0.3s ease;
+    caret-color: transparent;
 }
 
 #board input.valid {
@@ -39,6 +40,11 @@ body {
     font-weight: bold;
 }
 
+#board input.player {
+    background: lightblue;
+    font-weight: bold;
+}
+
 /* thicker borders to mark 3x3 boxes */
 #board input[data-col="2"],
 #board input[data-col="5"] {
@@ -50,9 +56,33 @@ body {
     border-bottom: 2px solid #333;
 }
 
+#controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
 button {
-    margin: 0.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     font-size: 1rem;
     cursor: pointer;
+    border: none;
+    border-radius: 20px;
+    background-color: #4a90d9;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #357abd;
+}
+
+#instructions {
+    height: 1.5rem;
+    color: black;
+    font-size: 0.9rem;
+}
+#status {
+    height: 1.5rem;
+    color: darkblue;
+    font-size: 0.9rem;
 }

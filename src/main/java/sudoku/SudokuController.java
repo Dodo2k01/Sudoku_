@@ -17,7 +17,7 @@ public class SudokuController {
         Sudoku sudoku = new Sudoku();
         sudoku.populateSudokuRandomly();
         ClueElimination ce = new ClueElimination(sudoku, 25);
-        ce.runPipeline(3);
+        ce.runPipeline(1);
         return new PuzzleResponse(toGrid(ce.getSolvedSudoku()), toGrid(ce.getPuzzle()));
     }
 
