@@ -1,14 +1,16 @@
 package sudoku;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 @RequestMapping("/api/dodoku")
 public class SudokuController {
 
     public record PuzzleResponse(int[][] solved, int[][] puzzle) {}
+    public record LegalRequest(int[][] board, int row, int col, int val) {}
+    public record LegalResponse(boolean legal){}
 
     @GetMapping("/new")
     public PuzzleResponse newSudoku() {
@@ -17,6 +19,12 @@ public class SudokuController {
         ClueElimination ce = new ClueElimination(sudoku, 25);
         ce.runPipeline(3);
         return new PuzzleResponse(toGrid(ce.getSolvedSudoku()), toGrid(ce.getPuzzle()));
+    }
+
+    @PostMapping("/legality")
+    public LegalResponse legality(@RequestBody LegalRequest req) {
+        Sudoku sudoku = new Sudoku(req.board);
+        return new LegalResponse(sudoku.getCell(req.row, req.col).setValue(req.val));
     }
 
 

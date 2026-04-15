@@ -10,30 +10,13 @@ public class Sudoku {
 
 
     public Sudoku() {
-        List<Cell> cells = new ArrayList<>(81);
+        this.cells = new ArrayList<>(81);
         for (int i = 0; i < rows.length; i++) {
             for (int j = 0; j < cols.length; j++) {
-                cells.add(new Cell(i, j));
+                this.cells.add(new Cell(i, j));
             }
         }
-        this.cells = cells;
-        for (int i = 0; i < 9; i++) {
-            rows[i] = new Group(i);
-            cols[i] = new Group(i);
-            cubes[i] = new Group(i);
-        }
-
-        for (int i = 0; i < cells.size(); i++) {
-            Cell cell = cells.get(i);
-            int xAxis = cell.getxAxis();
-            int yAxis = cell.getyAxis();
-            rows[xAxis].addCell(cell);
-            cell.setRow(rows[xAxis]);
-            cols[yAxis].addCell(cell);
-            cell.setCol(cols[yAxis]);
-            cubes[(xAxis/3) * 3 + yAxis/3].addCell(cell);
-            cell.setCube(cubes[(xAxis/3) * 3 + yAxis/3]);
-        }
+        defineGroups();
     }
 
     public Sudoku(Sudoku sudoku) {
@@ -46,6 +29,23 @@ public class Sudoku {
             }
             this.cells.add(cellCloned);
         }
+        defineGroups();
+    }
+    public Sudoku(int[][] sudoku) {
+        this.cells = new ArrayList<>(sudoku.length*sudoku[0].length);
+        for (int i = 0; i < sudoku.length; i++) {
+            for (int j = 0; j < sudoku[0].length; j++) {
+                Cell cell = new Cell(i, j);
+                this.cells.add(cell);
+                if(sudoku[i][j] != 0) {
+                    cell.setValue(sudoku[i][j]);
+                }
+            }
+        }
+        defineGroups();
+    }
+
+    private void defineGroups(){
         for (int i = 0; i < 9; i++) {
             rows[i] = new Group(i);
             cols[i] = new Group(i);
@@ -129,6 +129,21 @@ public class Sudoku {
 
     public List<Cell> getCells() {
         return cells;
+    }
+
+    /**
+     *
+     * @param row
+     * @param col
+     * @return
+     */
+    public Cell getCell(int row, int col) {
+        for (Cell c : cells) {
+            if (c.getxAxis() == row && c.getyAxis() == col) {
+                return c;
+            }
+        }
+        return null;
     }
 
     public boolean equals(Sudoku sudoku) {
