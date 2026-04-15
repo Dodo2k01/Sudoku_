@@ -1,18 +1,18 @@
-package org.example;
+package sudoku;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+
 
 public class ClueElimination {
     Sudoku solvedSudoku;
     int maxClues;
-    Sudoku almostMinimalSudoku;
+    Sudoku puzzle;
 
 
-    public Sudoku getAlmostMinimalSudoku() {
-        return almostMinimalSudoku;
+    public Sudoku getPuzzle() {
+        return puzzle;
     }
 
     public Sudoku getSolvedSudoku() {
@@ -42,12 +42,12 @@ public class ClueElimination {
         LocalDateTime tEnd = LocalDateTime.now().plusSeconds(timeLimitSeconds);
         Sudoku currentBestSudoku = new Sudoku(this.solvedSudoku);
         int minClues = 81;
-        Random random = new Random();
+//        Random random = new Random();
 
         while (LocalDateTime.now().isBefore(tEnd)) {
             Sudoku working = new Sudoku(currentBestSudoku);
             List<Cell> workingCells = working.getCells();
-            Collections.shuffle(workingCells, random);
+            Collections.shuffle(workingCells);
 
             for (Cell cell : workingCells) {
                 int val = cell.getValue();
@@ -70,8 +70,11 @@ public class ClueElimination {
                 break;
             }
         }
-        this.almostMinimalSudoku = currentBestSudoku;
+        this.puzzle = currentBestSudoku;
     }
+
+
+
 
     public static void main(String[] args) {
         Sudoku solved = new Sudoku();
@@ -79,6 +82,6 @@ public class ClueElimination {
         System.out.println(solved);
         ClueElimination ce = new ClueElimination(solved, 20);
         ce.runPipeline(60);
-        System.out.println(ce.getAlmostMinimalSudoku());
+        System.out.println(ce.getPuzzle());
     }
 }

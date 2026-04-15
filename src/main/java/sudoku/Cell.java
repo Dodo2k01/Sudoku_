@@ -1,4 +1,4 @@
-package org.example;
+package sudoku;
 
 import java.util.*;
 

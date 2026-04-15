@@ -1,4 +1,4 @@
-package org.example;
+package sudoku;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class Sudoku {
         Cell minDomainCell = Collections.min(remCells, Comparator.comparingInt(c -> c.getDomain().size()));
         remCells.remove(minDomainCell);
         List<Integer> domain = minDomainCell.getDomain();
-        Collections.shuffle(domain, new Random(42));
+        Collections.shuffle(domain);
         for (Integer val : domain){
             minDomainCell.setValue(val);
             if(populateSudokuRandomly(remCells)) {
