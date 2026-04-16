@@ -60,7 +60,7 @@ function revealSolution(){
 }
 
 async function checkLegality(r, c, v){
-    const res = await fetch("http://localhost:8080/api/dodoku/legality", {
+    const res = await fetch("/api/dodoku/legality", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ board: puzzle, row: r, col: c, val: v })

@@ -3,6 +3,7 @@ package sudoku;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ClueElimination {
@@ -70,6 +71,21 @@ public class ClueElimination {
                 break;
             }
         }
+        int toFill = this.maxClues - minClues;
+        List<Cell> zeroCells = currentBestSudoku.getCells().stream().filter(c -> c.getValue()==0).collect(Collectors.toList());
+        Collections.shuffle(zeroCells);
+        for (int i = 0; i < toFill; i++) {
+            Cell cell = zeroCells.get(i);
+            int x = cell.getxAxis();
+            int y = cell.getyAxis();
+            cell.setValue(this.solvedSudoku.getCell(x, y).getValue());
+        }
         this.puzzle = currentBestSudoku;
+    }
+
+    private int getNumClues(Sudoku sudoku) {
+        int nClues = 0;
+        for (Cell cell : sudoku.getCells()) {if(cell.getValue()!=0) nClues++;}
+        return nClues;
     }
 }

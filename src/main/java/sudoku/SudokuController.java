@@ -11,6 +11,7 @@ public class SudokuController {
     public record PuzzleResponse(int[][] solved, int[][] puzzle) {}
     public record LegalRequest(int[][] board, int row, int col, int val) {}
     public record LegalResponse(boolean legal){}
+    public record DifficultyLevel(Difficulty diff){}
 
     @GetMapping("/new")
     public PuzzleResponse newSudoku() {
@@ -33,5 +34,11 @@ public class SudokuController {
         int [][] grid = new int[9][9];
         for (Cell c : sudoku.getCells()) {grid[c.getxAxis()][c.getyAxis()] = c.getValue();}
         return grid;
+    }
+
+    public enum Difficulty {
+        EASY,
+        MEDIUM,
+        HARD
     }
 }
