@@ -162,11 +162,4 @@ public class Sudoku {
         }
         return Arrays.deepToString(board);
     }
-
-
-    public static void main(String[] args) {
-        Sudoku sudoku = new Sudoku();
-        sudoku.populateSudokuRandomly();
-        System.out.println(sudoku);
-    }
 }

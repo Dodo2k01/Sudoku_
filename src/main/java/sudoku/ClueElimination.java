@@ -72,16 +72,4 @@ public class ClueElimination {
         }
         this.puzzle = currentBestSudoku;
     }
-
-
-
-
-    public static void main(String[] args) {
-        Sudoku solved = new Sudoku();
-        solved.populateSudokuRandomly();
-        System.out.println(solved);
-        ClueElimination ce = new ClueElimination(solved, 20);
-        ce.runPipeline(60);
-        System.out.println(ce.getPuzzle());
-    }
 }
